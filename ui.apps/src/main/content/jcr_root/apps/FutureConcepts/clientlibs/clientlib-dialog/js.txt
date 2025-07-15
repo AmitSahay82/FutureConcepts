@@ -1,0 +1,2 @@
+#base=js
+multifielddialog.js

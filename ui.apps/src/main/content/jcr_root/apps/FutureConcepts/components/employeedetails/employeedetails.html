@@ -1,0 +1,16 @@
+<div class="employee-container">
+    <div class="employee-card">
+        <div class="employee-avatar">
+            <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="Employee Avatar">
+        </div>
+        <div class="employee-details">
+            <p><strong>Employee's Name:</strong> ${properties.name}</p>
+            <p><strong>Age:</strong> ${properties.age}</p>
+            <p><strong>Phone Number:</strong> ${properties.phonenumber}</p>
+            <p><strong>Company:</strong> ${properties.company}</p>
+            <p><strong>Designation:</strong> ${properties.designation}</p>
+        </div>
+    </div>
+</div>
+<sly data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html"/>
+<sly data-sly-call="${clientlib.css @ categories='FutureConcepts.concepts'}"/>

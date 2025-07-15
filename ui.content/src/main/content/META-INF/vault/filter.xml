@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workspaceFilter version="1.0">
+    <filter root="/conf/FutureConcepts" mode="merge"/>
+    <filter root="/content/FutureConcepts" mode="merge"/>
+    <filter root="/content/dam/FutureConcepts" mode="merge">
+        <exclude pattern="/content/dam/FutureConcepts(/.*)?"/>
+        <include pattern="/content/dam/FutureConcepts/jcr:content(/.*)?"/>
+    </filter>
+    <filter root="/content/dam/FutureConcepts/asset.jpg" mode="merge"/>
+    <filter root="/content/experience-fragments/FutureConcepts" mode="merge"/>
+</workspaceFilter>

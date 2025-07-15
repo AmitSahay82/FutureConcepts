@@ -1,0 +1,91 @@
+.article-wrapper {
+    max-width: 1200px;
+    margin: 20px auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f7f9fc;
+    padding: 30px;
+    border-radius: 10px;
+    color: #333;
+}
+
+.article-wrapper h2 {
+    font-size: 26px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 10px;
+    color: #2c3e50;
+}
+
+.article-wrapper img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    object-fit: cover;
+}
+
+.article-intro {
+    font-size: 16px;
+    margin-bottom: 30px;
+    color: #555;
+}
+
+.article-cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px 20px; /* row-gap (vertical) and column-gap (horizontal) */
+}
+
+.article-card {
+    background-color: #fff;
+    padding: 20px;
+    width: auto; /* For 2 cards per row */
+    margin-top: 20px;
+    border-radius: 10px;
+    border: 1px solid #e4e4e4;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+
+.article-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.article-card h3 {
+    font-size: 22px; /* ⬆️ Slightly bigger for title */
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0 0 8px;
+}
+
+.article-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px; /* ⬇️ Slightly smaller */
+    color: #888;
+    margin-bottom: 10px;
+    font-style: italic;
+}
+
+.article-description {
+    font-size: 15px; /* ⬅️ Between title and meta */
+    color: #444;
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.article-card p {
+    margin: 0;
+    line-height: 1.6;
+}
+
+.article-cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px 20px; /* row-gap (vertical) and column-gap (horizontal) */
+}

@@ -1,0 +1,251 @@
+/* Base Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+}
+
+.txu-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Utility Bar */
+.txu-header-utility {
+  background-color: #00477e;
+  color: #fff;
+  font-size: 14px;
+}
+
+.txu-utility-items {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.txu-utility-right,
+.txu-utility-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 10px 20px;
+}
+
+.txu-segment-switcher {
+  color: #fff;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 0.25rem 0;
+  border-bottom: 2px solid transparent;
+  transition: border-bottom 0.3s;
+}
+
+.txu-segment-switcher.active {
+  border-bottom: 2px solid #fff;
+}
+
+.txu-segment-divider {
+  width: 1px;
+  height: 14px;
+  background-color: #fff;
+}
+.txu-utility-link {
+  display: flex;
+  align-items: center;
+  color: white;
+  font-size: 14px;
+  text-decoration: none;
+  gap: 6px;
+  padding: 0 0.25rem;
+}
+
+/* Main Header */
+.txu-main-nav {
+  background-color: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.txu-nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+}
+
+.txu-logo {
+  flex: 0 0 auto;
+}
+
+.txu-mobile-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.txu-hamburger {
+  width: 24px;
+  height: 2px;
+  background-color: #333;
+  position: relative;
+}
+
+.txu-hamburger::before,
+.txu-hamburger::after {
+  content: "";
+  position: absolute;
+  width: 24px;
+  height: 2px;
+  background-color: #333;
+  left: 0;
+}
+
+.txu-hamburger::before {
+  top: -8px;
+}
+
+.txu-hamburger::after {
+  bottom: -8px;
+}
+
+/* Navigation */
+/* Center-align main nav list with spacing from logo */
+.txu-primary-nav {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: center;
+}
+
+.txu-nav-list {
+  display: flex;
+  gap: 60px; /* spacing between each main nav item */
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+
+.txu-nav-item {
+  position: relative;
+}
+
+.txu-nav-link {
+  color: #003865;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  padding: 10px 5px;
+  transition: color 0.3s ease;
+}
+
+.txu-nav-link:hover {
+  color: #007ac2;
+}
+
+.txu-chevron {
+  width: 18px; /* Increased size */
+  height: 18px;
+  margin-left: 4px;
+  vertical-align: middle;
+  transition: transform 0.3s ease;
+}
+
+/* Rotate arrow when nav item is active */
+.txu-nav-item.open .txu-chevron,
+.txu-nav-item:hover .txu-chevron {
+  transform: rotate(180deg);
+}
+
+/* Dropdown Menu */
+.txu-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  padding: 12px 0;
+  display: none;
+  min-width: 200px;
+  z-index: 99;
+}
+
+.txu-nav-item:hover .txu-dropdown-menu {
+  display: block;
+}
+
+.txu-dropdown-link {
+  display: block;
+  padding: 10px 20px;
+  color: #003865;
+  font-size: 15px;
+  transition: background-color 0.3s ease;
+}
+
+.txu-dropdown-link:hover {
+  background-color: #f4f4f4;
+}
+
+/* CTA Buttons */
+/* === TXU Header CTA Buttons Styles === */
+
+.txu-cta-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem; /* Space between Sign In and Shop Plans */
+  margin-left: auto; /* Push CTAs to the right if needed */
+}
+
+/* --- Sign In Button --- */
+
+.txu-btn-signin {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 600;
+  color: #003B5C; /* Dark blue for text */
+  transition: color 0.3s ease;
+}
+
+.txu-btn-signin:hover {
+  color: #005A9E; /* Slight hover change */
+}
+
+.txu-icon-user {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+/* --- Shop Plans Button --- */
+
+.txu-btn-primary {
+  background-color: #0078D4; /* TXU Blue */
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 999px; /* Fully rounded pill */
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+}
+
+.txu-btn-primary:hover {
+  background-color: #005A9E; /* Darker blue on hover */
+}

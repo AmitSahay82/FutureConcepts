@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workspaceFilter version="1.0">
+    <filter root="/apps/FutureConcepts/clientlibs"/>
+    <filter root="/apps/FutureConcepts/components"/>
+    <filter root="/apps/FutureConcepts/i18n"/>
+</workspaceFilter>

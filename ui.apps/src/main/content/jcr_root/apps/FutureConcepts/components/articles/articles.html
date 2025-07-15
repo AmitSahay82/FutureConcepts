@@ -1,0 +1,20 @@
+<sly data-sly-use.articleModel="com.adobe.aem.tutorial.core.models.ArticleDetailsModel" />
+
+<div class="article-wrapper">
+    <img src="${articleModel.image @ context='uri'}" alt="Employee Image" />
+    <p><strong>${articleModel.title}</strong></p>
+    <p>${articleModel.description}</p>
+    <sly data-sly-list.article="${articleModel.article}">
+        <div class="article-card">
+            <h3 class="article-title">${article.artTitle}</h3>
+            <div class="article-meta">
+                <span class="article-author">${article.author}</span>
+                <span class="article-date">${article.date}</span>
+            </div>
+            <p class="article-description">${article.artDescription}</p>
+        </div>
+    </sly>
+</div>
+
+<sly data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html"/>
+<sly data-sly-call="${clientlib.css @ categories='FutureConcepts.concepts'}"/>
