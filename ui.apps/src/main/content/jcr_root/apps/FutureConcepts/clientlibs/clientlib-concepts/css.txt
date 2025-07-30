@@ -3,3 +3,6 @@ employeedetails.css
 articles.css
 txuheader.css
 txufooter.css
+herocomponent.css
+twotilecomponent.css
+carouselcomponent.css
