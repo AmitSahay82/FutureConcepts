@@ -1,0 +1,15 @@
+<sly data-sly-use.tileModel="com.adobe.aem.tutorial.core.models.TileModel" />
+<div class="two-tile-component">
+    <div class="tile">
+        <img src="${tileModel.tile1Image @ context='uri'}" alt="Tile 1 Image"/>
+        <h2>${tileModel.tile1Title}</h2>
+        <p>${tileModel.tile1Description}</p>
+    </div>
+    <div class="tile">
+        <img src="${tileModel.tile2Image @ context='uri'}" alt="Tile 2 Image"/>
+        <h2>${tileModel.tile2Title}</h2>
+        <p>${tileModel.tile2Description}</p>
+    </div>
+</div>
+<sly data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html"/>
+<sly data-sly-call="${clientlib.css @ categories='FutureConcepts.concepts'}"/>

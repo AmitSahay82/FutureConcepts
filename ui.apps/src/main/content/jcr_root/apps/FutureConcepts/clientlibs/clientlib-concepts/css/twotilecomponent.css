@@ -1,0 +1,13 @@
+.two-tile-component {
+  display: flex;
+  gap: 20px;
+}
+.tile {
+  flex: 1;
+  text-align: center;
+}
+.tile img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}

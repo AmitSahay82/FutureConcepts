@@ -4,3 +4,4 @@ articles.css
 txuheader.css
 txufooter.css
 hero.css
+twotilecomponent.css
