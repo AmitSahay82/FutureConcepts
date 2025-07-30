@@ -11,11 +11,11 @@ import java.util.List;
 @Model(adaptables = Resource.class, defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL)
 public class CarouselModel {
 
-    @ChildResource(name = "slide") // assumes multifield node name is "slide"
-    private List<LinkItem> slide;
+    @ChildResource(name = "listItems") // assumes multifield node name is "slide"
+    private List<LinkItem> listItems;
 
-    public List<LinkItem> getSlide() {
-        return slide;
+    public List<LinkItem> getListItems() {
+        return listItems;
     }
 
     @Model(adaptables = Resource.class, defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL)

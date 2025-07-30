@@ -3,7 +3,7 @@
 
 <div class="carousel-component">
     <div class="carousel-track-wrapper">
-        <ul class="carousel-track" data-sly-list.item="${carouselModel.slide}">
+        <ul class="carousel-track" data-sly-list.item="${carouselModel.listItems}">
             <li class="carousel-slide" style="background-image: url('${item.image @ context='uri'}');">
                 <div class="slide-caption">
                     <h2>${item.title}</h2>
