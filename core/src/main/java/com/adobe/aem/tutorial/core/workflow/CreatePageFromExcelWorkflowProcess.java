@@ -12,7 +12,6 @@ import com.day.cq.wcm.api.WCMException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.sling.api.resource.*;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,78 +21,81 @@ import java.io.InputStream;
 import java.util.*;
 
 @Component(service = WorkflowProcess.class, property = {
-        "process.label=Create AEM Page from Excel"
+        "process.label = Create AEM Page from Excel"
 })
 public class CreatePageFromExcelWorkflowProcess implements WorkflowProcess {
 
     private static final Logger log = LoggerFactory.getLogger(CreatePageFromExcelWorkflowProcess.class);
-
-    private static final String DAM_RENDITION_PATH = "/jcr:content/renditions/original/jcr:content";
+    private static final String TEMPLATE_PATH = "/conf/FutureConcepts/settings/wcm/templates/txu-template";
     private static final String PAGE_PARENT_PATH = "/content/FutureConcepts/us/";
 
     @Override
     public void execute(WorkItem item, WorkflowSession workflowSession, MetaDataMap metaDataMap)
             throws WorkflowException {
 
-        String payloadPath = item.getWorkflowData().getPayload().toString();
-        log.info("Workflow triggered for asset: {}", payloadPath);
-
-        // Trim the extra part after .xlsx
-        int xlsxIndex = payloadPath.indexOf(".xlsx");
-        if (xlsxIndex != -1) {
-            payloadPath = payloadPath.substring(0, xlsxIndex + 5); // ".xlsx" is 5 characters
-        }
-        log.info("Workflow triggered for asset after trim: {}", payloadPath);
-
-        String fileName = payloadPath.substring(payloadPath.lastIndexOf("/") + 1);
-        String pageName = fileName.replaceFirst("[.][^.]+$", "");
-        log.debug("Derived page name from file: {}", pageName);
+        String payloadPath = getSanitizedPayload(item.getWorkflowData().getPayload().toString());
+        log.info("Workflow started for asset: {}", payloadPath);
 
         try (ResourceResolver resolver = workflowSession.adaptTo(ResourceResolver.class)) {
-            log.debug("Got system user resolver successfully.");
-
             Resource fileRes = resolver.getResource(payloadPath);
             if (fileRes == null) {
-                log.error("File resource not found at path: {}", payloadPath);
+                log.error("File not found at payload: {}", payloadPath);
                 return;
             }
-            log.debug("File resource fetched: {}", fileRes.getPath());
 
             Asset asset = fileRes.adaptTo(Asset.class);
             if (asset == null) {
-                log.error("Failed to adapt resource to Asset.");
+                log.error("Could not adapt to Asset at path: {}", payloadPath);
                 return;
             }
-            InputStream inputStream = asset.getOriginal().getStream(); // Gets original binary
-            log.debug("InputStream to Excel file obtained.");
+            log.info("Successfully adapted resource to Asset: {}", asset.getPath());
 
-            List<Map<String, String>> excelRows = parseExcel(inputStream);
-            log.info("Parsed {} rows from Excel.", excelRows.size());
+            String fileName = payloadPath.substring(payloadPath.lastIndexOf('/') + 1);
+            String pageName = fileName.replaceFirst("[.][^.]+$", "");
 
-            createPageWithComponents(resolver, PAGE_PARENT_PATH, pageName, excelRows);
-            log.info("Page '{}' successfully created at '{}'", pageName, PAGE_PARENT_PATH);
+            try (InputStream excelStream = asset.getOriginal().getStream()) {
+                List<Map<String, String>> excelRows = parseExcel(excelStream);
+                log.info("Parsed Excel with {} row(s)", excelRows.size());
+
+                Page page = createPage(resolver, pageName);
+                createComponentStructure(resolver, page, excelRows);
+                log.info("Page structure creation completed for: {}", page.getPath());
+            }
 
         } catch (Exception e) {
-            log.error("Exception during workflow execution: ", e);
+            log.error("Workflow error for asset: {}", payloadPath, e);
             throw new WorkflowException(e);
         }
+
+        log.info("Workflow finished successfully for: {}", payloadPath);
+    }
+
+    private String getSanitizedPayload(String payload) {
+        int idx = payload.indexOf(".xlsx");
+        return (idx != -1) ? payload.substring(0, idx + 5) : payload;
+    }
+
+    private Page createPage(ResourceResolver resolver, String pageName) throws WCMException {
+        PageManager pageManager = resolver.adaptTo(PageManager.class);
+        if (pageManager == null) {
+            throw new IllegalStateException("PageManager unavailable.");
+        }
+        Page page = pageManager.create(PAGE_PARENT_PATH, pageName, TEMPLATE_PATH, pageName, true);
+        log.info("Created page: {}", page.getPath());
+        return page;
     }
 
     private List<Map<String, String>> parseExcel(InputStream inputStream) throws Exception {
         List<Map<String, String>> rows = new ArrayList<>();
-        log.debug("Starting Excel parsing...");
-
         Workbook workbook = WorkbookFactory.create(inputStream);
         Sheet sheet = workbook.getSheetAt(0);
         Iterator<Row> rowIterator = sheet.iterator();
 
         List<String> headers = new ArrayList<>();
         if (rowIterator.hasNext()) {
-            Row headerRow = rowIterator.next();
-            for (Cell cell : headerRow) {
+            for (Cell cell : rowIterator.next()) {
                 headers.add(cell.getStringCellValue().trim());
             }
-            log.debug("Parsed headers: {}", headers);
         }
 
         while (rowIterator.hasNext()) {
@@ -101,60 +103,56 @@ public class CreatePageFromExcelWorkflowProcess implements WorkflowProcess {
             Map<String, String> rowData = new HashMap<>();
             for (int i = 0; i < headers.size(); i++) {
                 Cell cell = row.getCell(i);
-                String cellValue = (cell != null) ? getCellValue(cell) : "";
-                rowData.put(headers.get(i), cellValue);
+                rowData.put(headers.get(i), getCellValue(cell));
             }
             rows.add(rowData);
         }
-
-        log.debug("Completed parsing Excel. Total rows: {}", rows.size());
         return rows;
     }
 
     private String getCellValue(Cell cell) {
+        if (cell == null) return "";
         switch (cell.getCellType()) {
-            case STRING:
-                return cell.getStringCellValue();
-            case NUMERIC:
-                return String.valueOf((long) cell.getNumericCellValue());
-            case BOOLEAN:
-                return String.valueOf(cell.getBooleanCellValue());
-            default:
-                return "";
+            case STRING: return cell.getStringCellValue();
+            case NUMERIC: return String.valueOf((long) cell.getNumericCellValue());
+            case BOOLEAN: return String.valueOf(cell.getBooleanCellValue());
+            default: return "";
         }
     }
 
-    private void createPageWithComponents(ResourceResolver resolver, String parentPath, String pageName,
-                                          List<Map<String, String>> rows) throws PersistenceException, WCMException, RepositoryException {
-
-        log.debug("Starting page creation logic...");
-
-        PageManager pageManager = resolver.adaptTo(PageManager.class);
-        if (pageManager == null) {
-            log.error("PageManager is null. Cannot proceed.");
-            return;
-        }
-
-        // Create page using the specified template
-        String templatePath = "/conf/FutureConcepts/settings/wcm/templates/txu-template";
-        Page page = pageManager.create(parentPath, pageName, templatePath, pageName, true);
-        log.debug("Page created at: {}", page.getPath());
-
+    private void createComponentStructure(ResourceResolver resolver, Page page, List<Map<String, String>> rows)
+            throws RepositoryException, PersistenceException {
         Resource jcrContentRes = resolver.getResource(page.getPath() + "/jcr:content");
-        if (jcrContentRes == null) {
-            log.error("jcr:content not found for created page.");
-            return;
-        }
+        if (jcrContentRes == null) throw new IllegalStateException("jcr:content missing.");
 
         Node jcrContentNode = jcrContentRes.adaptTo(Node.class);
+        Node rootNode = ensureNode(jcrContentNode, "root");
+        Node containerNode = ensureNode(rootNode, "container");
 
-        // Add root node under jcr:content
-        Node rootNode = hasOrGetNode(jcrContentNode, "root");
+        Map<String, List<Map<String, String>>> grouped = groupExcelRows(rows);
 
-        // Add container under root
-        Node containerNode = hasOrGetNode(rootNode, "container");
+        for (Map.Entry<String, List<Map<String, String>>> entry : grouped.entrySet()) {
+            List<Map<String, String>> groupRows = entry.getValue();
+            Map<String, String> firstRow = groupRows.get(0);
+            String componentType = firstRow.get("ComponentName");
 
-        // Group Excel rows by component + groupId
+            Node componentNode = containerNode.addNode(componentType, "nt:unstructured");
+            componentNode.setProperty("sling:resourceType", "FutureConcepts/components/" + componentType);
+
+            if (groupRows.size() == 1) {
+                addProperties(componentNode, firstRow);
+            } else {
+                addMultifieldItems(componentNode, groupRows);
+            }
+
+            log.info("Added component: {}", componentType);
+        }
+
+        resolver.commit();
+        log.info("Changes committed to repository for page: {}", page.getPath());
+    }
+
+    private Map<String, List<Map<String, String>>> groupExcelRows(List<Map<String, String>> rows) {
         Map<String, List<Map<String, String>>> grouped = new LinkedHashMap<>();
         for (Map<String, String> row : rows) {
             String component = row.get("ComponentName");
@@ -162,68 +160,39 @@ public class CreatePageFromExcelWorkflowProcess implements WorkflowProcess {
             String key = component + "::" + groupId;
             grouped.computeIfAbsent(key, k -> new ArrayList<>()).add(row);
         }
-
-        log.debug("Grouped components: {}", grouped.keySet());
-
-        for (Map.Entry<String, List<Map<String, String>>> entry : grouped.entrySet()) {
-            List<Map<String, String>> groupRows = entry.getValue();
-            Map<String, String> firstRow = groupRows.get(0);
-            String componentType = firstRow.get("ComponentName");
-
-            // Use the componentType directly as node name (no numbering)
-            String nodeName = componentType;
-            Node componentNode = containerNode.addNode(nodeName, "nt:unstructured");
-            componentNode.setProperty("sling:resourceType", "FutureConcepts/components/" + componentType);
-
-            if (groupRows.size() == 1) {
-                // Single row: regular component
-                for (Map.Entry<String, String> prop : firstRow.entrySet()) {
-                    String key = prop.getKey();
-                    String value = prop.getValue();
-                    if (!key.equals("ComponentName") && !key.equals("groupId") && !value.isBlank()) {
-                        componentNode.setProperty(key, value);
-                        log.debug("Property set: {} = {}", key, value);
-                    }
-                }
-            } else {
-                // Multiple rows: multifield
-                int mfCounter = 0;
-                for (Map<String, String> mfRow : groupRows) {
-                    Node listItems;
-                    if (componentNode.hasNode("listItems"))
-                    {
-                        listItems = componentNode.getNode("listItems");
-                    }
-                    else {
-                        listItems = componentNode.addNode("listItems", "nt:unstructured");
-                    }
-                    Node itemNode = listItems.addNode("item" + mfCounter++, "nt:unstructured");
-                    for (Map.Entry<String, String> prop : mfRow.entrySet()) {
-                        String key = prop.getKey();
-                        String value = prop.getValue();
-                        if (!key.equals("ComponentName") && !key.equals("groupId") && !value.isBlank()) {
-                            itemNode.setProperty(key, value);
-                            log.debug("Multifield item set: {} = {}", key, value);
-                        }
-                    }
-                }
-            }
-        }
-        resolver.commit();
-        log.debug("All content committed to repository.");
+        return grouped;
     }
 
-    private static Node hasOrGetNode(Node checkNode, String nodeName) throws RepositoryException {
-        Node searchNode;
-        if (checkNode.hasNode(nodeName)) {
-            searchNode = checkNode.getNode(nodeName);
-            log.debug(" {} node already exists, using existing one.", nodeName);
-        } else {
-            searchNode = checkNode.addNode(nodeName, "nt:unstructured");
-            searchNode.setProperty("sling:resourceType", "FutureConcepts/components/container");
-            searchNode.setProperty("layout", "responsiveGrid");
-            log.debug("Created new {} node.", nodeName);
+    private void addProperties(Node node, Map<String, String> row) throws RepositoryException {
+        for (Map.Entry<String, String> entry : row.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            if (!"ComponentName".equals(key) && !"groupId".equals(key) && isNonEmptyField(value)) {
+                node.setProperty(key, value);
+            }
         }
-        return searchNode;
+    }
+
+    private void addMultifieldItems(Node componentNode, List<Map<String, String>> rows) throws RepositoryException {
+        Node listItems = componentNode.addNode("listItems", "nt:unstructured");
+        int index = 0;
+        for (Map<String, String> row : rows) {
+            Node item = listItems.addNode("item" + index++, "nt:unstructured");
+            addProperties(item, row);
+        }
+    }
+
+    private Node ensureNode(Node parent, String name) throws RepositoryException {
+        if (parent.hasNode(name)) {
+            return parent.getNode(name);
+        }
+        Node node = parent.addNode(name, "nt:unstructured");
+        node.setProperty("sling:resourceType", "FutureConcepts/components/container");
+        node.setProperty("layout", "responsiveGrid");
+        return node;
+    }
+
+    private boolean isNonEmptyField(String value) {
+        return value != null && !value.trim().isEmpty();
     }
 }
