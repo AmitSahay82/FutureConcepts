@@ -15,17 +15,17 @@
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                         fieldLabel="Tile 1 Title"
-                        name="./tile1Title"/>
+                        name="./title"/>
                     <tile1Description
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/textarea"
                         fieldLabel="Tile 1 Description"
-                        name="./tile1Description"/>
+                        name="./description"/>
                     <tile1Image
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/pathbrowser"
                         fieldLabel="Tile 1 Image"
-                        name="./tile1Image"
+                        name="./image"
                         rootPath="/content/dam"
                         filters="[hierarchyNotFile]"/>
                     <!-- Tile 2 -->
@@ -33,17 +33,17 @@
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                         fieldLabel="Tile 2 Title"
-                        name="./tile2Title"/>
+                        name="./title2"/>
                     <tile2Description
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/textarea"
                         fieldLabel="Tile 2 Description"
-                        name="./tile2Description"/>
+                        name="./description2"/>
                     <tile2Image
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/pathbrowser"
                         fieldLabel="Tile 2 Image"
-                        name="./tile2Image"
+                        name="./image2"
                         rootPath="/content/dam"
                         filters="[hierarchyNotFile]"/>
                 </items>

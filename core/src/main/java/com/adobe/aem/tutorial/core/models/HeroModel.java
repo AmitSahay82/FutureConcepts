@@ -9,7 +9,7 @@ import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 public class HeroModel {
 
     @ValueMapValue
-    private String heading;
+    private String title;
 
     @ValueMapValue
     private String description;
@@ -17,8 +17,8 @@ public class HeroModel {
     @ValueMapValue
     private String backgroundImage;
 
-    public String getHeading() {
-        return heading;
+    public String getTitle() {
+        return title;
     }
 
     public String getDescription() {

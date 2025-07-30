@@ -13,47 +13,47 @@ public class TileModel {
 
     // Tile 1 fields
     @ValueMapValue
-    private String tile1Title;
+    private String title;
 
     @ValueMapValue
-    private String tile1Description;
+    private String description;
 
     @ValueMapValue
-    private String tile1Image;
+    private String image;
 
     // Tile 2 fields
     @ValueMapValue
-    private String tile2Title;
+    private String title2;
 
     @ValueMapValue
-    private String tile2Description;
+    private String description2;
 
     @ValueMapValue
-    private String tile2Image;
+    private String image2;
 
     // Getter methods for HTL
 
-    public String getTile1Title() {
-        return tile1Title;
+    public String getTitle() {
+        return title;
     }
 
-    public String getTile1Description() {
-        return tile1Description;
+    public String getDescription() {
+        return description;
     }
 
-    public String getTile1Image() {
-        return tile1Image;
+    public String getImage() {
+        return image;
     }
 
-    public String getTile2Title() {
-        return tile2Title;
+    public String getTitle2() {
+        return title2;
     }
 
-    public String getTile2Description() {
-        return tile2Description;
+    public String getDescription2() {
+        return description2;
     }
 
-    public String getTile2Image() {
-        return tile2Image;
+    public String getImage2() {
+        return image2;
     }
 }
