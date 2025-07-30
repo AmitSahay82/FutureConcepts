@@ -1,5 +1,5 @@
 <sly data-sly-use.heroModel="com.adobe.aem.tutorial.core.models.HeroModel" />
-<div class="hero" style="background-image: url('${heroModel.backgroundImage @ context='uri'}')">
+<div class="hero" style="background-image: url('${heroModel.image @ context='uri'}')">
     <div class="hero__content">
         <h1>${heroModel.title}</h1>
         <p>${heroModel.description}</p>

@@ -15,7 +15,7 @@ public class HeroModel {
     private String description;
 
     @ValueMapValue
-    private String backgroundImage;
+    private String image;
 
     public String getTitle() {
         return title;
@@ -25,7 +25,7 @@ public class HeroModel {
         return description;
     }
 
-    public String getBackgroundImage() {
-        return backgroundImage;
+    public String getImage() {
+        return image;
     }
 }

@@ -25,7 +25,7 @@
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/pathbrowser"
                         fieldLabel="Background Image"
-                        name="./backgroundImage"
+                        name="./image"
                         rootPath="/content/dam"
                         required="false"
                         filters="[hierarchyNotFile]" />
