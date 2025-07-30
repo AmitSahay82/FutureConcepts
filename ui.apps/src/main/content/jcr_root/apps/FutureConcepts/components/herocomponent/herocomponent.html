@@ -1,0 +1,9 @@
+<sly data-sly-use.heroModel="com.adobe.aem.tutorial.core.models.HeroModel" />
+<div class="hero" style="background-image: url('${heroModel.backgroundImage @ context='uri'}')">
+    <div class="hero__content">
+        <h1>${heroModel.heading}</h1>
+        <p>${heroModel.description}</p>
+    </div>
+</div>
+<sly data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html"/>
+<sly data-sly-call="${clientlib.css @ categories='FutureConcepts.concepts'}"/>
