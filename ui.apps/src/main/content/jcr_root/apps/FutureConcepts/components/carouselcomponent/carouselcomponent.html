@@ -1,0 +1,24 @@
+<!-- Carousel HTL Markup -->
+<sly data-sly-use.carouselModel="com.adobe.aem.tutorial.core.models.CarouselModel"/>
+
+<div class="carousel-component">
+    <div class="carousel-track-wrapper">
+        <ul class="carousel-track" data-sly-list.item="${carouselModel.slide}">
+            <li class="carousel-slide" style="background-image: url('${item.image @ context='uri'}');">
+                <div class="slide-caption">
+                    <h2>${item.title}</h2>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <!-- Control buttons container -->
+    <div class="carousel-controls">
+        <button class="carousel-btn prev">‹</button>
+        <button class="carousel-btn pause">❚❚</button>
+        <button class="carousel-btn next">›</button>
+    </div>
+</div>
+
+<!-- Link Clienlibs -->
+<sly data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html" />
+<sly data-sly-call="${clientlib.all @ categories='FutureConcepts.concepts'}" />
