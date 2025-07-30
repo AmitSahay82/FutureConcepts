@@ -1,10 +1,12 @@
-
 document.addEventListener('DOMContentLoaded', function () {
-    const track = document.querySelector('.carousel-track');
+  const carouselComponents = document.querySelectorAll('.carousel-component');
+
+  carouselComponents.forEach(component => {
+    const track = component.querySelector('.carousel-track');
     const slides = Array.from(track.children);
-    const prevButton = document.querySelector('.carousel-btn.prev');
-    const nextButton = document.querySelector('.carousel-btn.next');
-    const pauseButton = document.querySelector('.carousel-btn.pause');
+    const prevButton = component.querySelector('.carousel-btn.prev');
+    const nextButton = component.querySelector('.carousel-btn.next');
+    const pauseButton = component.querySelector('.carousel-btn.pause');
 
     let currentIndex = 0;
     let autoPlay = true;
@@ -37,20 +39,15 @@ document.addEventListener('DOMContentLoaded', function () {
       updateCarousel();
     });
 
-    nextButton.addEventListener('click', () => {
-      goToNextSlide();
-    });
+    nextButton.addEventListener('click', goToNextSlide);
 
     pauseButton.addEventListener('click', () => {
-      if (autoPlay) {
-        stopAutoPlay();
-      } else {
-        startAutoPlay();
-      }
+      autoPlay ? stopAutoPlay() : startAutoPlay();
     });
 
     window.addEventListener('resize', updateCarousel);
 
     updateCarousel();
     startAutoPlay();
+  });
 });

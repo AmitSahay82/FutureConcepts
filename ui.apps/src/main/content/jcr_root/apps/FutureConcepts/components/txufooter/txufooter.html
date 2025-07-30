@@ -1,9 +1,9 @@
 <!-- Sling Model use -->
 <sly data-sly-use.model="com.adobe.aem.tutorial.core.models.TXUFooterModel" />
 
-<!-- TXU Footer Component -->
 <div class="txu-footer">
-    <!-- Footer Top Section -->
+
+    <!-- Footer Top -->
     <div class="footer-top">
         <div class="footer-logo">
             <img src="${model.logoImage}" alt="Logo">
@@ -12,6 +12,7 @@
 
     <!-- Footer Columns -->
     <div class="footer-columns">
+
         <!-- Column One -->
         <div class="footer-column">
             <ul>
@@ -21,7 +22,7 @@
             </ul>
         </div>
 
-        <!-- Column 2: First 5 items from columnTwo -->
+        <!-- Column Two (first 5 items) -->
         <div class="footer-column">
             <ul>
                 <sly data-sly-list.item="${model.columnTwo}">
@@ -31,7 +32,8 @@
                 </sly>
             </ul>
         </div>
-        <!-- Column 3: Remaining 4 items from columnTwo + buttons -->
+
+        <!-- Column Three (remaining items) -->
         <div class="footer-column">
             <ul>
                 <sly data-sly-list.item="${model.columnTwo}">
@@ -40,33 +42,41 @@
                     </sly>
                 </sly>
             </ul>
-        </div
+        </div>
+
+        <!-- Column Four: Buttons -->
         <div class="footer-column">
             <div class="footer-actions">
                 <a href="${model.shopPlansLink}" class="footer-shop-plans">Shop Plans</a>
                 <a href="${model.signInLink}" class="footer-sign-in">Sign In</a>
             </div>
         </div>
-        <!-- Footer Bottom Row -->
-        <div class="footer-bottom">
-            <div class="footer-bottom-container">
-                <div class="footer-social-icons">
-                    <a href="https://www.facebook.com/TXUEnergy" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/2023_Facebook_icon.svg/500px-2023_Facebook_icon.svg.png" alt="Facebook" />
-                    </a>
-                    <a href="https://twitter.com/TXUEnergy" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg" alt="Twitter" />
-                    </a>
-                </div>
 
-                <div class="footer-bottom-text">
-                    <p>&copy; 2025 TXU Energy Retail Company LLC REP #10004 | 800-818-6132 | PO Box 650764 Dallas, TX 75265-0764</p>
-                </div>
+    </div>
+
+    <!-- Footer Bottom -->
+    <div class="footer-bottom">
+        <div class="footer-bottom-container">
+
+            <!-- Social Icons -->
+            <div class="footer-social-icons">
+                <a href="https://www.facebook.com/TXUEnergy" target="_blank" aria-label="Facebook">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook" />
+                </a>
+                <a href="https://www.twitter.com/TXUEnergy" target="_blank" aria-label="Twitter">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg" alt="Twitter" />
+                </a>
             </div>
-        </div>
 
+            <!-- Footer Text -->
+            <div class="footer-bottom-text">
+                <p>&copy; 2025 TXU Energy Retail Company LLC REP #10004 | 800-818-6132 | PO Box 650764 Dallas, TX 75265-0764</p>
+            </div>
+
+        </div>
     </div>
 </div>
 
-<sly data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html"/>
-<sly data-sly-call="${clientlib.css @ categories='FutureConcepts.concepts'}"/>
+<!-- Load Footer CSS -->
+<sly data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html" />
+<sly data-sly-call="${clientlib.css @ categories='FutureConcepts.concepts'}" />

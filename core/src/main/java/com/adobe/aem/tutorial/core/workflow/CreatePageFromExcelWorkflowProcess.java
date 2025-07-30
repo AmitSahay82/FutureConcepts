@@ -136,7 +136,11 @@ public class CreatePageFromExcelWorkflowProcess implements WorkflowProcess {
             Map<String, String> firstRow = groupRows.get(0);
             String componentType = firstRow.get("ComponentName");
 
-            Node componentNode = containerNode.addNode(componentType, "nt:unstructured");
+            String groupId = firstRow.getOrDefault("groupId", UUID.randomUUID().toString());
+            String uniqueNodeName = componentType + "-" + groupId;
+
+            log.info("Creating component node: {}", uniqueNodeName);
+            Node componentNode = containerNode.addNode(uniqueNodeName, "nt:unstructured");
             componentNode.setProperty("sling:resourceType", "FutureConcepts/components/" + componentType);
 
             if (groupRows.size() == 1) {
