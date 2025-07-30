@@ -7,8 +7,6 @@ import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.ChildResource;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Model(adaptables = Resource.class,
@@ -40,12 +38,20 @@ public class ArticleDetailsModel {
         return description;
     }
 
+    /**
+     * This logic was to reverse list of multifield items
+     * @return reversed list
+     */
+//    public List<ArticleItem> getArticle() {
+//        if (article != null) {
+//            List<ArticleItem> reversed = new ArrayList<>(article);
+//            Collections.reverse(reversed);
+//            return reversed;
+//        }
+//        return Collections.emptyList();
+//    }
+
     public List<ArticleItem> getArticle() {
-        if (article != null) {
-            List<ArticleItem> reversed = new ArrayList<>(article);
-            Collections.reverse(reversed);
-            return reversed;
-        }
-        return Collections.emptyList();
+        return article;
     }
 }
