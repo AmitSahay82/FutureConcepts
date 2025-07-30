@@ -1,2 +1,1 @@
-#base=js
-multifielddialog.js
+js/multifielddialog.js

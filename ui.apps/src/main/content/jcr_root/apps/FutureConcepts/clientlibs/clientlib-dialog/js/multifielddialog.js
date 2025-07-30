@@ -1,22 +1,52 @@
-(function ($, Coral) {
+(function () {
+  const MF_SELECTOR = 'coral-multifield[data-granite-coral-multifield-name="./article"]';
+
   $(document).on("dialog-ready", function () {
-    $(".coral-Multifield").each(function () {
-      const $multifield = $(this);
-      const multifieldEl = this;
+    const multifield = document.querySelector(MF_SELECTOR);
+    if (!multifield) {
+      console.warn("❌ Multifield './article' not found");
+      return;
+    }
 
-      // Move Add button above the list
-      const $addButton = $multifield.find("button[coral-multifield-add]");
-      const $list = $multifield.find(".coral-Multifield-list");
+    console.log("✅ Dialog ready");
 
-      if ($addButton.length && $list.length) {
-        $addButton.detach().insertBefore($list);
-      }
+    const addButton = multifield.querySelector('button[coral-multifield-add]');
 
-      // Add new items at the top
-      multifieldEl.addEventListener("coral-collection:add", function (e) {
-        const newItem = e.detail.item;
-        $list[0].insertBefore(newItem, $list[0].firstChild);
+    // Move Add button to top only once
+    if (addButton && addButton !== multifield.firstElementChild) {
+      multifield.insertBefore(addButton, multifield.firstChild);
+      console.log("⬆️ Add button moved to top");
+    }
+
+    // Track added item manually, only once per add
+    let lastAddedItem = null;
+
+    multifield.addEventListener("coral-collection:add", function (e) {
+      const newItem = e.detail.item;
+
+      // Skip if already handled
+      if (lastAddedItem === newItem) return;
+      lastAddedItem = newItem;
+
+      // Wait till it's rendered inside DOM
+      requestAnimationFrame(() => {
+        const addBtn = multifield.querySelector('button[coral-multifield-add]');
+        if (addBtn && newItem && addBtn.parentNode === newItem.parentNode) {
+          try {
+            // Insert new item right after the Add button
+            addBtn.parentNode.insertBefore(newItem, addBtn.nextElementSibling);
+            console.log("🆕 New item inserted after Add button");
+
+            // Focus first input
+            const input = newItem.querySelector("input, textarea, [tabindex]:not([tabindex='-1'])");
+            if (input) input.focus();
+          } catch (err) {
+            console.error("❌ insertBefore failed:", err);
+          }
+        } else {
+          console.warn("⚠️ Unable to insert — parent mismatch or item missing");
+        }
       });
     });
   });
-})(jQuery, Coral);
+})();
