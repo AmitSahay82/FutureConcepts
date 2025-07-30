@@ -1,13 +1,36 @@
 .two-tile-component {
   display: flex;
-  gap: 20px;
+  justify-content: center; /* center tiles within the available space */
+  gap: 40px;
+  padding: 20px;
 }
+
 .tile {
-  flex: 1;
+  width: 20vw; /* make each tile thinner */
+  max-width: 300px;
   text-align: center;
-}
-.tile img {
-  max-width: 100%;
-  height: auto;
+  background: #f9f9f9;
   border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.tile img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-bottom: 1px solid #ccc;
+  border-radius: 8px 8px 0 0;
+}
+
+.tile h2 {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin: 12px 0 4px;
+}
+
+.tile p {
+  font-size: 0.95rem;
+  margin: 0 0 12px;
+  color: #555;
 }
